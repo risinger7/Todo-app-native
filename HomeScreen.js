@@ -1,48 +1,98 @@
-import React from 'react';
-import { useState } from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
-import Todo from "./components/Todo.js"
-import TodoList from './components/TodoList.js';
- 
-  const DATA = [
-    {
-      id: 1, 
-      title: "Gå ut med hunden", 
-      text: "Se till att han har koppel", 
-      done: false},
-    {
-      id: 2, 
-      title: "Mata katten",
-      text: "Häll upp en skål mjölk", 
-      done: false}
-  ]
+import React from "react";
+import { useState } from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Button,
+  FlatList,
+  TouchableOpacity,
+} from "react-native";
+import Todo from "./components/Todo.js";
+import DetailsScreen from "./DetailsScreen.js";
+
+const DATA = [
+  {
+    id: 1,
+    title: "Gå ut med hunden",
+    text: "Se till att han har koppel",
+    done: true,
+  },
+  {
+    id: 2,
+    title: "Mata katten",
+    text: "Häll upp en skål mjölk",
+    done: false,
+  },
+];
 
 export default function HomeScreen({ navigation }) {
+  const [todos, setTodos] = useState(DATA);
 
-  const [todos, setTodos] = useState(DATA)
+  function toggleDone(id) {
+    const copyTodos = [...todos];
+    copyTodos.map((item) => {
+      if (item.id == id) {
+        item.done = !item.done;
+        <DetailsScreen done={item.done} />;
+        return setTodos(copyTodos);
+      }
+    });
+  }
 
   return (
-      <View style={styles.wrapper}>
-        <View style={styles.titleContainer}>
-          <Text style={styles.title}>Todos</Text>
+    <View style={styles.wrapper}>
+      <View style={styles.titleContainer}>
+        <Text style={styles.title}>Todos</Text>
 
-          <Button onPress={() => navigation.navigate("Add", {
-            todos: todos, setTodos: setTodos
-          })}
-            style={styles.buttonAdd} title='Add'></Button>
-        
-        </View>
+        <Button
+          onPress={() =>
+            navigation.navigate("Add", {
+              todos: todos,
+              setTodos: setTodos,
+            })
+          }
+          style={styles.buttonAdd}
+          title="Add"
+        ></Button>
+      </View>
 
-        <TodoList todos={todos} setTodos={setTodos} navigation={navigation}></TodoList>
-       
-      </View> 
+      <TouchableOpacity
+        style={styles.checkBox}
+        onPress={() =>
+          navigation.navigate("Details", {
+            todos: todos,
+            setTodos: setTodos,
+          })
+        }
+      />
+
+      <FlatList
+        data={todos}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <View>
+            <Todo
+              navigation={navigation}
+              todos={todos}
+              setTodos={setTodos}
+              toggleDone={toggleDone}
+              id={item.id}
+              title={item.title}
+              text={item.text}
+              done={item.done}
+            ></Todo>
+          </View>
+        )}
+      />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     // alignItems: 'center',
     // justifyContent: 'center',
   },
@@ -69,5 +119,5 @@ const styles = StyleSheet.create({
 
   items: {
     backgroundColor: "#18d3dd",
-  }
+  },
 });

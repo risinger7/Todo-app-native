@@ -1,28 +1,31 @@
-import React from 'react';
-import { useState } from 'react';
-import { StyleSheet, Text, View, Button, TextInput } from 'react-native';
+import React from "react";
+import { useState } from "react";
+import { StyleSheet, Text, View, Button, TextInput } from "react-native";
 
 const todos = [];
 
 export default function AddScreen({ route, navigation }) {
+  const { todos, setTodos } = route.params;
 
-  const {todos, setTodos} = route.params
+  const [title, setTitle] = useState("");
+  const [text, setText] = useState("");
 
-  const [title, setTitle] = useState("")
-  const [text, setText] = useState("")
+ 
 
   function handleAdd() {
-    if(text !== "" && title !== "") {
+    if (text !== "" && title !== "") {
       const newTodo = {
         id: Date.now(),
         title: title,
         text: text,
-        done: false
-      }    
-        setTitle("");
-        setText("");
-        setTodos([...todos, newTodo]);    
-      };       
+        done: false,
+      };
+      setTitle("");
+      setText("");
+      setTodos([...todos, newTodo]);
+
+      navigation.goBack();
+    }
   }
 
   return (
@@ -43,14 +46,13 @@ export default function AddScreen({ route, navigation }) {
       <Button onPress={() => navigation.goBack()} title="Dismiss" />
     </View>
   );
-
 }
 
 const styles = StyleSheet.create({
-  addWrapper: { 
-    flex: 1, 
-    alignItems: 'center', 
-    justifyContent: 'center',
+  addWrapper: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
     border: "1px solid yellow",
   },
 
@@ -63,8 +65,5 @@ const styles = StyleSheet.create({
     border: "2px solid blue",
     width: "100%",
     height: 60,
-  }
-  
-})
-
-
+  },
+});

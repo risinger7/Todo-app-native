@@ -1,32 +1,30 @@
-import React from 'react';
-import { View, Text, StyleSheet, FlatList } from 'react-native';
-import Todo from "./Todo"
+import React from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+ 
+} from "react-native";
+import Todo from "./Todo";
 
-const TodoList = ( props ) => {
-
-  const { todos, setTodos, navigation, done } = props
+const TodoList = (props) => {
+  const { todos, setTodos, navigation, done } = props;
 
   return (
     <FlatList
       data={todos}
       keyExtractor={(item) => item.id} // toString() maybe
       renderItem={({ item }) => (
-        
         <View>
-          <Todo 
-            todos={todos}
-            setTodos={setTodos}
-            id={item.id} 
-            title={item.title} 
+          <Todo
+            id={item.id}
+            title={item.title}
             text={item.text}
-            navigation={navigation} 
+            navigation={navigation}
             done={item.done}
-          >
-          </Todo>
-
+          ></Todo>
         </View>
-       
-        
       )}
     />
   );

@@ -1,17 +1,13 @@
 import React from "react";
-import { NavigationContainer } from "@react-navigation/native"
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { 
-        View, 
-        Text, 
-        StyleSheet, 
-        TouchableOpacity, 
-        Button
-      } from "react-native"
+import { View, Text, StyleSheet, TouchableOpacity, Button } from "react-native";
 
-export default function Todo( props ) {
-  
-  const { todos, setTodos, id, title, text, navigation, done } = props
+export default function Todo(props) {
+  const { navigation, todos, setTodos, toggleDone, id, title, text, done } =
+    props;
+
+  const todo = todos.map((todo) => todo.id == id);
+  console.log(todo, "todododododo");
+  console.log("tgoogle", toggleDone);
   return (
     <View style={styles.todoWrapper}>
       <View style={styles.container1}>
@@ -20,31 +16,32 @@ export default function Todo( props ) {
       </View>
 
       <View style={styles.container2}>
-        <TouchableOpacity 
-          style={styles.checkBox} 
-          onPress={() => navigation.navigate("Details", {
-            todos: todos,
-            setTodos: setTodos,
-            id: id, 
-            title: title,
-            text: text,  
-            done: done    
-          })}
+        <TouchableOpacity
+          title="hej"
+          style={styles.checkBox}
+          onPress={() =>
+            navigation.navigate("Details", {
+              todos: todos,
+              setTodos: setTodos,
+              toggleDone: toggleDone,
+              id: id,
+              title: title,
+              text: text,
+              done: done,
+            })
+          }
         />
-        <Text>Arrow</Text>
-      </View>   
+      </View>
     </View>
-  )
+  );
 }
-
-
 
 const styles = StyleSheet.create({
   todoWrapper: {
-    backgroundColor: '#f2f2f2',
+    backgroundColor: "#f2f2f2",
     border: "1px solid black",
     borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
+    borderBottomColor: "#ccc",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
@@ -53,7 +50,7 @@ const styles = StyleSheet.create({
     padding: 10,
     margin: 10,
   },
-  
+
   container1: {
     border: "1px solid red",
     flexDirection: "row",
@@ -81,7 +78,6 @@ const styles = StyleSheet.create({
   },
 
   container2: {
-    backgroundColor: "green"
-
-  }
-})
+    backgroundColor: "green",
+  },
+});
