@@ -29,23 +29,12 @@ const DATA = [
 export default function HomeScreen({ navigation }) {
   const [todos, setTodos] = useState(DATA);
 
-  function toggleDone(id) {
-    const copyTodos = [...todos];
-    copyTodos.map((item) => {
-      if (item.id == id) {
-        item.done = !item.done;
-        <DetailsScreen done={item.done} />;
-        return setTodos(copyTodos);
-      }
-    });
-  }
-
   return (
     <View style={styles.wrapper}>
       <View style={styles.titleContainer}>
         <Text style={styles.title}>Todos</Text>
 
-        <Button
+        <TouchableOpacity
           onPress={() =>
             navigation.navigate("Add", {
               todos: todos,
@@ -54,35 +43,22 @@ export default function HomeScreen({ navigation }) {
           }
           style={styles.buttonAdd}
           title="Add"
-        ></Button>
+        >
+          <Text style={styles.buttonText}>Add</Text>
+        </TouchableOpacity>
       </View>
-
-      <TouchableOpacity
-        style={styles.checkBox}
-        onPress={() =>
-          navigation.navigate("Details", {
-            todos: todos,
-            setTodos: setTodos,
-          })
-        }
-      />
 
       <FlatList
         data={todos}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <View>
-            <Todo
-              navigation={navigation}
-              todos={todos}
-              setTodos={setTodos}
-              toggleDone={toggleDone}
-              id={item.id}
-              title={item.title}
-              text={item.text}
-              done={item.done}
-            ></Todo>
-          </View>
+          <Todo
+            navigation={navigation}
+            todos={todos}
+            setTodos={setTodos}
+            id={item.id}
+            done={item.done}
+          ></Todo>
         )}
       />
     </View>
@@ -98,26 +74,31 @@ const styles = StyleSheet.create({
   },
 
   titleContainer: {
-    marginTop: 20,
+    marginTop: 10,
     height: 60,
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
+    alignItems: "center",
     border: "2px solid black",
   },
 
   title: {
-    fontSize: 20,
-    color: "#2012e2",
+    marginLeft: 10,
+    fontSize: "24px",
+    color: "black",
   },
 
   buttonAdd: {
-    backgroundColor: "#151515",
-    height: 20,
+    justifyContent: "center",
+    alignItems: "center",
+    color: "white",
+    backgroundColor: "blue",
+    height: "100%",
     width: 60,
   },
-
-  items: {
-    backgroundColor: "#18d3dd",
+  buttonText: {
+    color: "white",
+    fontSize: "20px",
   },
 });

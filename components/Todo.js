@@ -1,18 +1,34 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Button } from "react-native";
 
 export default function Todo(props) {
-  const { navigation, todos, setTodos, toggleDone, id, title, text, done } =
-    props;
+  const { navigation, todos, setTodos, id, done } = props;
 
-  const todo = todos.map((todo) => todo.id == id);
-  console.log(todo, "todododododo");
-  console.log("tgoogle", toggleDone);
+  const todo = todos.find((todo) => todo.id === id);
+  console.log(todo.done, "done");
+  const handleToggle = (id) => {
+    const copyTodos = [...todos];
+    copyTodos.map((todo) => {
+      if (todo.id === id) {
+        todo.done = !todo.done;
+      }
+    });
+    setTodos(copyTodos);
+  };
+
   return (
     <View style={styles.todoWrapper}>
       <View style={styles.container1}>
-        <TouchableOpacity style={styles.checkBox}></TouchableOpacity>
-        <Text style={styles.title}>{title}</Text>
+        <TouchableOpacity
+          title="button"
+          style={[
+            styles.text,
+            styles.checkBox,
+            todo.done ? styles.isDone : styles.notDone,
+          ]}
+          onPress={() => handleToggle(id)}
+        ></TouchableOpacity>
+        <Text style={styles.title}>{todo.title}</Text>
       </View>
 
       <View style={styles.container2}>
@@ -23,14 +39,13 @@ export default function Todo(props) {
             navigation.navigate("Details", {
               todos: todos,
               setTodos: setTodos,
-              toggleDone: toggleDone,
               id: id,
-              title: title,
-              text: text,
               done: done,
             })
           }
-        />
+        >
+          <Text>Edit</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -48,11 +63,16 @@ const styles = StyleSheet.create({
     height: 60,
     color: "black",
     padding: 10,
-    margin: 10,
+    marginTop: 10,
+  },
+
+  text: {
+    color: "green",
+    textDecorationColor: "none",
   },
 
   container1: {
-    border: "1px solid red",
+    border: "1px solid black",
     flexDirection: "row",
     alignItems: "top",
     maxWidth: "80%",
@@ -65,19 +85,31 @@ const styles = StyleSheet.create({
     border: "2px solid black",
     height: 30,
     width: 30,
+  },
+
+  isDone: {
+    backgroundColor: "green",
+  },
+  notDone: {
     backgroundColor: "none",
   },
 
   title: {
-    border: "1px solid orange",
+    marginLeft: 10,
+    lineHeight: 30,
     fontSize: "20px",
-    color: "red",
+    color: "black",
     maxHeight: "100%",
-    maxWidth: "80%",
+    maxWidth: "100%",
     overflow: "hidden",
   },
 
+  done: {
+    position: "absolute",
+  },
+
   container2: {
-    backgroundColor: "green",
+    border: "2px solid black",
+    backgroundColor: "none",
   },
 });

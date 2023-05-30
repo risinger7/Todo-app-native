@@ -2,15 +2,11 @@ import React from "react";
 import { useState } from "react";
 import { StyleSheet, Text, View, Button, TextInput } from "react-native";
 
-const todos = [];
-
 export default function AddScreen({ route, navigation }) {
   const { todos, setTodos } = route.params;
 
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
-
- 
 
   function handleAdd() {
     if (text !== "" && title !== "") {
@@ -42,8 +38,13 @@ export default function AddScreen({ route, navigation }) {
         value={text}
         onChangeText={(value) => setText(value)}
       />
-      <Button title="Add" onPress={handleAdd} />
-      <Button onPress={() => navigation.goBack()} title="Dismiss" />
+
+      <View style={styles.dismissButton}>
+        <Button style={styles.addButton} title="Add" onPress={handleAdd} />
+      </View>
+      <View style={styles.dismissButton}>
+        <Button onPress={() => navigation.goBack()} title="Dismiss" />
+      </View>
     </View>
   );
 }
@@ -54,6 +55,18 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     border: "1px solid yellow",
+  },
+
+  addButton: {
+    backgroundColor: "blue",
+    marginTop: 10,
+    marginBottom: 10,
+  },
+  dismissButton: {
+    color: "white",
+    backgroundColor: "black",
+    marginTop: 10,
+    marginBottom: 10,
   },
 
   inputTitle: {

@@ -2,52 +2,53 @@ import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 
 export default function DetailsScreen({ route, navigation }) {
-  const { todos, setTodos, toggleDone, id, title, text, done } = route.params;
+  const { todos, setTodos, id, done } = route.params;
+  const [isDone, setIsDone] = useState(done);
 
+  const todo = todos.find((todo) => todo.id === id);
   function handleDelete(id) {
     setTodos(todos.filter((item) => item.id !== id));
     navigation.navigate("Home"); // send back home after delete
   }
 
-  function toggleDone() {
-    return !done;
-  }
-
-  useEffect(() => {
-    console.log("done changed");
-  }, [todos]);
-
-  console.log("Donnee", done);
+  const handleToggle = (id) => {
+    const copyTodos = [...todos];
+    copyTodos.map((todo) => {
+      if (todo.id === id) {
+        todo.done = !todo.done;
+        setIsDone(todo.done); // toggle done in Details
+      }
+    });
+    setTodos(copyTodos);
+  };
 
   return (
     <View style={styles.detailsWrapper}>
-      {done && <View>Hello there done</View>}
-
-      <View style={styles.title}>
-        <Text>{title}</Text>
-        <Text>{text}</Text>
-        <Text>{id}</Text>
+      <View style={styles.titleContainer}>
+        <Text style={styles.title}>{todo.title}</Text>
+        <Text>{todo.text}</Text>
       </View>
 
       <TouchableOpacity
-        style={styles.deleteButton}
+        style={[styles.doneButton, isDone ? styles.isDone : styles.notDone]}
         title="toggle"
         Text="toggle"
-        onPress={() => toggleDone(id)}
+        onPress={() => handleToggle(id)}
       >
-        <Text>toggle done</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        style={styles.deleteButton}
-        title="Delete"
-        Text="Delete"
-        onPress={() => handleDelete(id)}
-      >
-        <Text>Delete</Text>
+        <Text>
+          {isDone ? <Text>Todo is done</Text> : <Text>Todo is not done</Text>}
+        </Text>
       </TouchableOpacity>
 
       <View style={styles.buttons}>
+        <TouchableOpacity
+          style={styles.deleteButton}
+          title="Delete"
+          Text="Delete"
+          onPress={() => handleDelete(id)}
+        >
+          <Text>Delete</Text>
+        </TouchableOpacity>
         <TouchableOpacity
           style={styles.homeButton}
           title="Go home.."
@@ -65,26 +66,41 @@ const styles = StyleSheet.create({
   detailsWrapper: {
     border: "1px solid black",
     height: "100%",
+    width: "100%",
     justifyContent: "space-between",
-    alignItems: "space-between",
+    alignItems: "center",
+  },
+
+  title: {
+    color: "#151515",
+    fontSize: "20px",
   },
 
   doneButton: {
-    backgroundColor: "green",
+    border: "2px solid black",
+    backgroundColor: "#fff",
     width: "100%",
     height: 30,
   },
 
+  isDone: {
+    backgroundColor: "green",
+  },
+  notDone: {
+    backgroundColor: "red",
+  },
+
   buttons: {
+    width: "100%",
     border: "2px solid blue",
     flexDirection: "row",
     alignItems: "space-evenly",
   },
 
   homeButton: {
+    border: "2px solid #151515",
     height: 30,
     width: "50%",
-    backgroundColor: "yellow",
   },
 
   deleteButton: {
